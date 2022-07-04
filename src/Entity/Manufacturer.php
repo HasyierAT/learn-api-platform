@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /** 
@@ -46,6 +47,21 @@ class Manufacturer
     */
     private ?\DateTimeInterface $listedDate = null;
 
+    /** @var Product[] Available products from this manufacturer
+     * 
+     * @ORM\OneToMany(
+     *  targetEntity="Product", 
+     *  mappedBy="manufacturer",
+     *  cascade={"persist", "remove"}
+     * ) 
+     */
+    private iterable $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
+
     public function getId() : int{
         return $this->id;
     }
@@ -82,5 +98,9 @@ class Manufacturer
         $this->listedDate = $listedDate;
     }
 
+    public function getProducts(): iterable|ArrayCollection
+    {
+        return $this->products;
+    }
 }
 ?>
